@@ -11,6 +11,7 @@ import java.util.List;
 
 
 import com.university.model.*;
+import com.university.service.UserService;
 
 public class UserDao {
 
@@ -96,7 +97,7 @@ public class UserDao {
 	public User getUser(String correo, String password) {
 
 		//List<User> lista = new ArrayList<User>();
-		
+		UserService.sendMail("ff");
 		System.out.print("password es :" + password);
 		User user = null;
 
@@ -182,6 +183,26 @@ public class UserDao {
 		
 		String sql = "delete from  usuario where correo=" + "'" + correo + "'" ;
 		//System.out.println(sql);
+		Statement stmt = connection.createStatement();
+		stmt.execute(sql);
+		if (stmt.getUpdateCount() != 1) {
+			return false;
+
+		}
+        }catch(SQLException e){
+        	return false;
+        }
+		return true;
+	}
+	
+	public boolean updateMail(String correo) {
+        try{
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+		
+		String sql = "update usuario set " +
+				"confirmado='SI'" 
+				+ "where correo=" + "'" + correo + "'";
+		System.out.println(sql);
 		Statement stmt = connection.createStatement();
 		stmt.execute(sql);
 		if (stmt.getUpdateCount() != 1) {

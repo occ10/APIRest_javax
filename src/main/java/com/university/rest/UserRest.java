@@ -63,9 +63,21 @@ import com.university.dao.*;
 			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 	   }
 	   @PUT 
+	   @Path("/updateMail/{correo}") 
+	   //@Produces(MediaType.APPLICATION_JSON) 
+	  // @Consumes(MediaType.APPLICATION_JSON)
+	   public Response updateMail(@PathParam("correo")	String	correo){
+		   System.out.println(correo);
+		   if (userService.updateMailUser(correo)) {
+			   return Response.status(Response.Status.NO_CONTENT).build();
+			   
+		   }else
+			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+	   }
+	   @PUT 
 	   @Path("/update") 
-	   @Produces(MediaType.APPLICATION_JSON) 
-	   @Consumes(MediaType.APPLICATION_JSON)
+	   //@Produces(MediaType.APPLICATION_JSON) 
+	   //@Consumes(MediaType.APPLICATION_JSON)
 	   public Response updateUser(User user){ 
 		    
 		   if (userService.updateUser(user)) {
