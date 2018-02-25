@@ -122,10 +122,11 @@ public  boolean getPassword(String password, String hexPassword, String salt) th
 	}
     String hashHex = DatatypeConverter.printHexBinary(hash);
     
-    System.out.println(hashHex);
-    System.out.println(hexPassword);
-    
-    return hashHex == hexPassword;
+    //System.out.println(hashHex);
+    //System.out.println(hexPassword);
+    boolean correcto = hashHex.equalsIgnoreCase(hexPassword);
+        
+    return correcto;
    
     //return salt
     //return salt;

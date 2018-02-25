@@ -26,12 +26,12 @@ import com.university.dao.*;
 	   @Path("/users") 
 	   @Produces(MediaType.APPLICATION_JSON) 
 	   public Response getUsers(){
-		   if(userService.getUsers()!= null)
-		   return Response.ok(userService.getUsers()).build();
+		   List<User> usuarios = null;
+		   usuarios = userService.getUsers();
+		   if(usuarios!= null)
+		   return Response.ok(usuarios).build();
 		   else
 			   return Response.status(Response.Status.NO_CONTENT).build();  
-	      //return userService.getUsers(); 
-		   //return Response.status(Response.Status.NOT_FOUND).build();
 	   }  
 	   @POST
 	   @Path("/user") 
@@ -42,9 +42,21 @@ import com.university.dao.*;
 		   if(user!= null)
 		   return Response.ok(user).build();
 		   else
+			   return Response.status(Response.Status.NO_CONTENT).build(); 
+	   }
+	   
+	   @GET
+	   @Path("/userByMail/{correo}") 
+	   @Produces(MediaType.APPLICATION_JSON) 
+	   public Response getUserByMail(@PathParam("correo")	String	correo){
+		   System.out.println("response correct");
+		   UserDTO user = userService.obtenerDatosUserByMail(correo);
+		   if(user!= null){
+			  // System.out.println("response correct");
+		   return Response.ok(user).build();
+		   }
+		   else
 			   return Response.status(Response.Status.NO_CONTENT).build();  
-	      //return userService.getUsers(); 
-		   //return Response.status(Response.Status.NOT_FOUND).build();
 	   }
 	   
 	   @POST 
@@ -64,8 +76,8 @@ import com.university.dao.*;
 	   }
 	   @PUT 
 	   @Path("/updateMail/{correo}") 
-	   //@Produces(MediaType.APPLICATION_JSON) 
-	  // @Consumes(MediaType.APPLICATION_JSON)
+	   @Produces(MediaType.APPLICATION_JSON) 
+	   @Consumes(MediaType.APPLICATION_JSON)
 	   public Response updateMail(@PathParam("correo")	String	correo){
 		   System.out.println(correo);
 		   if (userService.updateMailUser(correo)) {
@@ -76,8 +88,8 @@ import com.university.dao.*;
 	   }
 	   @PUT 
 	   @Path("/update") 
-	   //@Produces(MediaType.APPLICATION_JSON) 
-	   //@Consumes(MediaType.APPLICATION_JSON)
+	   @Produces(MediaType.APPLICATION_JSON) 
+	   @Consumes(MediaType.APPLICATION_JSON)
 	   public Response updateUser(User user){ 
 		    
 		   if (userService.updateUser(user)) {

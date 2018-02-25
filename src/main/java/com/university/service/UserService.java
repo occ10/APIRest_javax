@@ -32,6 +32,13 @@ public class UserService {
 		else 
 			return null;
 	}
+	public UserDTO obtenerDatosUserByMail(String Correo){
+		User user = userDao.getUserByMail(Correo);
+		if(user != null)
+		return new UserDTO(user);
+		else 
+			return null;
+	}
 	public boolean updateUser(User user){
 		return userDao.update(user);
 	}
