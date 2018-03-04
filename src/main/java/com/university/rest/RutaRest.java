@@ -21,7 +21,6 @@ public class RutaRest {
 	   @GET 
 	   @Path("/routes/{correo}") 
 	   @Produces(MediaType.APPLICATION_JSON)
-	   @Consumes(MediaType.APPLICATION_JSON)
 	   public Response getRoutes(@PathParam("correo")	String	correo){
 	   //public Response getRoutes(@PathParam("correo")	String	correo){
 		   List<Ruta> rutas = null;
