@@ -13,7 +13,16 @@ public class RutaService {
 	public  RutaService(){
 		rutaDao =  RutaDao.getInstance();
 	}
-	public List<Ruta> getRutas(String correo){ 	 
-	      return rutaDao.getAllRoutes(correo); 
+	public List<Ruta> getRoutes(String email){ 	 
+	      return rutaDao.getAllRoutes(email); 
 	   }
+	public Ruta getRoute(int idRoute){ 	 
+	      return rutaDao.getRoute(idRoute); 
+	   }
+	public int insertRoute(Ruta ruta){ 	 
+	      return rutaDao.insertRoute(ruta); 
+	   }
+	public List<Ruta> getAllRoutesFromOrigin(String email,String origin){ 	 
+		      return rutaDao.getAllRoutesFromOrigin(email,origin); 
+		   }
 }

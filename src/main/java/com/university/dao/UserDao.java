@@ -95,19 +95,13 @@ public class UserDao {
 		return lista;
 	}
 
-	// public User getUser(String correo, String password) {
 	public User getUser(String correo, String password) {
-
-		// List<User> lista = new ArrayList<User>();
-		//UserService.sendMail("ff");
-		//System.out.print("password es :" + password);
 		User user = null;
 
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
 			String sql = "select contraseña,salt from usuario where correo=" + "'" + correo + "'";
-			// System.out.println(sql);
 			Statement stmtone = connection.createStatement();
 			ResultSet rsone = stmtone.executeQuery(sql);
 			if (rsone.next()) {
@@ -121,8 +115,6 @@ public class UserDao {
 						ResultSet rstow = stmttow.executeQuery(sqltow);
 						//System.out.println("excute " + rs2.next());
 						if (rstow.next()) {
-							//user = new User();
-							//System.out.println("correo devuelto " + rs.getString("correo"));
 							user.setCorreo(rstow.getString("correo"));
 							user.setNombre(rstow.getString("nombre"));
 							user.setApellido(rstow.getString("apellido"));
@@ -134,32 +126,22 @@ public class UserDao {
 							user.setDetalles(rstow.getString("detalles"));
 							user.setConfirmado(rstow.getString("confirmado"));
 							user.setOpcion(rstow.getInt("opcion"));
-							// lista.add(user);
 						}
 
 					}
 				} catch (NoSuchAlgorithmException e) {
-					//System.out.println("correo devuelto 1");
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
-				// lista.add(user);
 			}
 
 		} catch (SQLException e) {
-			//System.out.println("correo devuelto 2 "+ e.toString());
-			// System.out.println(e.getMessage() + "Error aqui");
 			return user;
 		}
 		return user;
 	}
 
-	// public User getUser(String correo, String password) {
 	public User getUserByMail(String correo) {
 
-		// List<User> lista = new ArrayList<User>();
-		// UserService.sendMail("ff");
 		System.out.print("correo es :" + correo);
 		User user = null;
 
@@ -182,11 +164,7 @@ public class UserDao {
 				user.setDetalles(rs.getString("detalles"));
 				user.setConfirmado(rs.getString("confirmado"));
 				user.setOpcion(rs.getInt("opcion"));
-				// lista.add(user);
 			}
-
-			// lista.add(user);
-
 		} catch (SQLException e) {
 			System.out.println(e.getMessage() + "Error aqui");
 			return user;

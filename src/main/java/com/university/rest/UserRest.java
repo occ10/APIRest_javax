@@ -1,7 +1,7 @@
 package com.university.rest;
 
 
-	import java.security.NoSuchAlgorithmException;
+	
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -12,12 +12,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces; 
-	import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import com.university.dao.*;
-	import com.university.model.*;
-	import com.university.service.*;
+import com.university.model.*;
+import com.university.service.*;
 	@Path("/UserService") 
 
 	public class UserRest {
@@ -26,33 +24,40 @@ import com.university.dao.*;
 	   @Path("/users") 
 	   @Produces(MediaType.APPLICATION_JSON) 
 	   public Response getUsers(){
+
 		   List<User> usuarios = null;
 		   usuarios = userService.getUsers();
 		   if(usuarios!= null)
 		   return Response.ok(usuarios).build();
-		   else
+		   else{
 			   return Response.status(Response.Status.NO_CONTENT).build();  
+		   }
 	   }  
 	   @POST
 	   @Path("/user") 
 	   @Produces(MediaType.APPLICATION_JSON) 
 	   @Consumes(MediaType.APPLICATION_JSON)
 	   public Response getUser(User usuario){
+		   Respuesta res = new Respuesta();
 		   UserDTO user = userService.obtenerDatosUser(usuario.getCorreo(),usuario.getContraseña());
 		   if(user!= null)
 		   return Response.ok(user).build();
-		   else
-			   return Response.status(Response.Status.NO_CONTENT).build(); 
+		   else{
+			   res.setClave("info");
+			   res.setValor("los dats no son correctos");
+			   return Response.status(Response.Status.UNAUTHORIZED).entity(res).build();
+		   }
+
 	   }
 	   
 	   @GET
 	   @Path("/userByMail/{correo}") 
 	   @Produces(MediaType.APPLICATION_JSON) 
 	   public Response getUserByMail(@PathParam("correo")	String	correo){
-		   System.out.println("response correct");
+		   //System.out.println("response correct");
 		   UserDTO user = userService.obtenerDatosUserByMail(correo);
 		   if(user!= null){
-			  // System.out.println("response correct");
+			  System.out.println("response correct");
 		   return Response.ok(user).build();
 		   }
 		   else
@@ -70,8 +75,7 @@ import com.university.dao.*;
 			   UserDTO usuario = userService.obtenerDatosUser(user.getCorreo(),user.getContraseña());
 			   return Response.status(Response.Status.CREATED).entity(usuario).build();
 			   
-		   }else
-			   System.out.println("false");
+		   }else		   
 			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 	   }
 	   @PUT 

@@ -1,9 +1,11 @@
 package com.university.rest;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -12,8 +14,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.university.model.Respuesta;
+import com.university.model.User;
 import com.university.model.Zona;
 import com.university.service.ZonaService;
+
+import Exception.ServiceException;
 
 @Path("/ZonaService") 
 public class ZonaRest {	
@@ -22,23 +27,32 @@ public class ZonaRest {
 	   @Path("/zonas/{code}") 
 	   @Produces(MediaType.APPLICATION_JSON)
 	   public Response getZones(@PathParam("code")	String	code){
-		   List<Zona> zona = null;
-		   zona = zonaService.getZones(code);
-		   if(zona != null)
-		   return Response.ok(zona).build();
-		   else
-			   return Response.status(Response.Status.NO_CONTENT).build();
+		   List<Zona> areas = null;
+		   try {
+			   areas = zonaService.getZones(code);
+			if(areas != null)
+			    return Response.ok(areas).build();
+			else
+				return Response.status(Response.Status.NO_CONTENT).build();
+		   } catch (ServiceException e) {
+			    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		   }
 	   }
 	   @GET 
 	   @Path("/zona/{code}") 
 	   @Produces(MediaType.APPLICATION_JSON)
 	   public Response getZone(@PathParam("code")	String	code){
-		   Zona zona = null;
-		   zona = zonaService.getZone(code);
-		   if(zona != null)
-		   return Response.ok(zona).build();
-		   else
-			   return Response.status(Response.Status.NO_CONTENT).build();
+		   Zona zone = null;
+		   try{
+			   zone = zonaService.getZone(code);
+			   if(zone != null)
+				   return Response.ok(zone).build();
+			   else
+				   return Response.status(Response.Status.NO_CONTENT).build();
+		   }catch (ServiceException e) {
+			    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		   }
+
 	   }
 	   
 	   @PUT 
@@ -47,15 +61,15 @@ public class ZonaRest {
 	   @Consumes(MediaType.APPLICATION_JSON)
 	   public Response updateZone(Zona zona){
 		   System.out.println(zona.getId());
-		   if (zonaService.updateZone(zona.getId())) {
-			   
-			   Respuesta res = new Respuesta();
-			   res.setClave("info");
-			   res.setValor("el dato se ha actualizado correctamente");
-			   return Response.ok(res).build();
-			   
-		   }else
-			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		   
+		   try{
+			   zonaService.updateZone(zona.getId());
+			   return Response.status(Response.Status.NO_CONTENT).build();
+				   
+		   }catch(ServiceException e){
+			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		   
+		   }
+
 	   }
 	   
 	   @PUT 
@@ -64,13 +78,31 @@ public class ZonaRest {
 	   @Consumes(MediaType.APPLICATION_JSON)
 	   public Response desocuppyZone(Zona zona){
 		   System.out.println(zona.getId());
-		   if (zonaService.desocuppyZone(zona.getId())) {
-			   Respuesta res = new Respuesta();
-			   res.setClave("info");
-			   res.setValor("el dato se ha actualizado correctamente");
-			   return Response.ok(res).build();
-			   
-		   }else
+		   try{
+			   zonaService.desocuppyZone(zona.getId());
+			   return Response.status(Response.Status.NO_CONTENT).build();   
+		   }catch(ServiceException e){
 			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		   }
+	   }
+	   
+	   @POST 
+	   @Path("/userOcuppyZone") 
+	   @Produces(MediaType.APPLICATION_JSON)
+	   @Consumes(MediaType.APPLICATION_JSON)
+	   public Response userOcuppyZone(User user){
+		   
+		   try{
+			   Zona zone = zonaService.userOcuppyZone(user);
+			   if(zone != null){
+				   System.out.println("zona aparcamiento:" + zone.getAparcamiento());
+				   return Response.ok(zone).build();
+			   }else
+				   return Response.status(Response.Status.NO_CONTENT).build();		   
+			   
+		   }catch(ServiceException e){	   
+			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		   }
+
 	   }
 }

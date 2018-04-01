@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -24,12 +26,45 @@ public class RutaRest {
 	   public Response getRoutes(@PathParam("correo")	String	correo){
 	   //public Response getRoutes(@PathParam("correo")	String	correo){
 		   List<Ruta> rutas = null;
-		   rutas = rutaService.getRutas(correo);
+		   rutas = rutaService.getRoutes(correo);
 		   if(rutas != null)
 		   return Response.ok(rutas).build();
 		   else
 			   return Response.status(Response.Status.NO_CONTENT).build();  
 	      //return userService.getUsers(); 
 		   //return Response.status(Response.Status.NOT_FOUND).build();
-	   }  
+	   }
+	   
+	   @GET 
+	   @Path("/routesOrigine/{correo}") 
+	   @Produces(MediaType.APPLICATION_JSON)
+	   public Response getRoutesFrmOrigine(@PathParam("correo")	String	correo){
+	   //public Response getRoutes(@PathParam("correo")	String	correo){
+		   List<Ruta> rutas = null;
+		   rutas = rutaService.getAllRoutesFromOrigin(correo,"usuario");
+		   if(rutas != null)
+		   return Response.ok(rutas).build();
+		   else
+			   return Response.status(Response.Status.NO_CONTENT).build();
+	   }
+
+	   @POST
+	   @Path("/insertRoute") 
+	   @Produces(MediaType.APPLICATION_JSON)
+	   @Consumes(MediaType.APPLICATION_JSON)
+	   public Response insertRoute(Ruta route){
+		  
+           int idRoute = rutaService.insertRoute(route);
+           boolean result = false;
+           Ruta routeResult = null;
+		   if(idRoute != -1){	
+			   System.out.println("el anuncio se ha insertado correctamente");
+			   routeResult = rutaService.getRoute(idRoute);
+			   if(routeResult != null){
+				   result = true;	
+				   System.out.println(routeResult.getDetalles());
+			   }
+		   }
+		   return result == true ? Response.status(Response.Status.CREATED).entity(routeResult).build() : Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+	   }
 }
