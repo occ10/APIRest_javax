@@ -108,10 +108,10 @@ public class UserDao {
 					if (user.getPassword(password, rsone.getString("contraseña"), rsone.getString("salt"))) {
 
 						String sqltow = "select * from usuario where correo=" + "'" + correo + "'";
-						//System.out.println(sql2);
+						// System.out.println(sql2);
 						Statement stmttow = connection.createStatement();
 						ResultSet rstow = stmttow.executeQuery(sqltow);
-						//System.out.println("excute " + rs2.next());
+						// System.out.println("excute " + rs2.next());
 						if (rstow.next()) {
 							user.setCorreo(rstow.getString("correo"));
 							user.setNombre(rstow.getString("nombre"));

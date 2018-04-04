@@ -97,7 +97,7 @@ public class ZonaRest {
 	    			return Response.ok(zone).build();
 	    		}else
 	    			System.out.println("usuario no ocupa zona");
-	    			return Response.status(Response.Status.NOT_FOUND).build();		   
+			return Response.status(Response.Status.NOT_FOUND).build();		   
 			   
 	    	}catch(ServiceException e){	   
 	    		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();

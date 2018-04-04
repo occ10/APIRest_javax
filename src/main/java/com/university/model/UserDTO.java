@@ -2,29 +2,31 @@ package com.university.model;
 
 import java.io.Serializable;
 
-public class UserDTO implements Serializable{
-	private static final long serialVersionUID = 1L; 
-	   private String correo;
-	   private String nombre; private String apellido;
-	   private int edad;
-	   private String telefono;
-	   private String foto;
-	   private String detalles;
-	   private String Confirmado ;
-	   private int opcion;
-	   
-		public UserDTO(User user){		
-			super();
-			  this.correo = user.getCorreo();
-			  this.nombre = user.getNombre();
-			  this.apellido  = user.getApellido();
-			  this.edad = user.getEdad();
-			  this.telefono = user.getTelefono();
-			  this.foto = user.getFoto();
-			  this.detalles = user.getDetalles();
-			  this.Confirmado = user.getConfirmado() ;
-			  this.opcion = user.getOpcion();		
-		}
+public class UserDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private String correo;
+	private String nombre;
+	private String apellido;
+	private int edad;
+	private String telefono;
+	private String foto;
+	private String detalles;
+	private String Confirmado;
+	private int opcion;
+
+	public UserDTO(User user) {
+		super();
+		this.correo = user.getCorreo();
+		this.nombre = user.getNombre();
+		this.apellido = user.getApellido();
+		this.edad = user.getEdad();
+		this.telefono = user.getTelefono();
+		this.foto = user.getFoto();
+		this.detalles = user.getDetalles();
+		this.Confirmado = user.getConfirmado();
+		this.opcion = user.getOpcion();
+	}
+
 	public String getCorreo() {
 		return correo;
 	}
@@ -100,6 +102,5 @@ public class UserDTO implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 
 }

@@ -28,7 +28,8 @@ public class RutaDao {
 	public static RutaDao getInstance() {
 		return new RutaDao();
 	}
-    //obtener todas las rutas publicadas
+
+	// obtener todas las rutas publicadas
 	public List<Ruta> getAllRoutes(String email) throws ServiceException {
 
 		List<Ruta> lista = new ArrayList<Ruta>();
@@ -77,7 +78,8 @@ public class RutaDao {
 		return lista;
 	}
 
-	//insertar una ruta y poner campo opcion a 1 a las rutas publicadas anteriormente
+	// insertar una ruta y poner campo opcion a 1 a las rutas publicadas
+	// anteriormente
 	public Ruta insertRoute(Ruta route) throws ServiceException {
 		String sqlTree = "";
 		String sqlOne = "";
@@ -97,22 +99,22 @@ public class RutaDao {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			java.sql.Date date = new java.sql.Date(millis);
 			String sqlTow = "INSERT INTO ruta (origen, precio, plazas, detalles, fechaPublicacion) VALUES (" + "'"
-					+ route.getOrigen() + "'," + route.getPrecio() + "," + route.getPlazas() + ",'" + route.getDetalles()
-					+ "','" + sdf.format(date) + "')";
+					+ route.getOrigen() + "'," + route.getPrecio() + "," + route.getPlazas() + ",'"
+					+ route.getDetalles() + "','" + sdf.format(date) + "')";
 
 			PreparedStatement ps = connection.prepareStatement(sqlTow, Statement.RETURN_GENERATED_KEYS);
-            ps.executeUpdate();
-            ResultSet rs=ps.getGeneratedKeys();
-            
-            if(rs.next()){
-                lastId=rs.getInt(1);
-            
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+
+			if (rs.next()) {
+				lastId = rs.getInt(1);
+
 				sqlTree = "INSERT INTO realizaruta (coche, usuario, ruta, opcion) VALUES (" + "'4444kkk','"
 						+ route.getUser().getCorreo() + "'," + lastId + ",'1')";
 
 				Statement stmtTree = connection.createStatement();
 				stmtTree.execute(sqlTree);
-            }
+			}
 			connection.commit();
 			// }
 		} catch (SQLException e) {
@@ -139,7 +141,8 @@ public class RutaDao {
 		}
 		return getRoute(lastId);
 	}
-	//obtener rutas a partir de un origen
+
+	// obtener rutas a partir de un origen
 	public List<Ruta> getAllRoutesFromOrigin(String email, String origin) throws ServiceException {
 
 		List<Ruta> lista = new ArrayList<Ruta>();
@@ -148,8 +151,8 @@ public class RutaDao {
 		User user;
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
-			String sql = "(SELECT ruta.*, usuario.* FROM ruta JOIN realizaruta ON realizaruta.ruta = ruta.id JOIN usuario ON usuario.correo = realizaruta.usuario WHERE (ruta.plazas - ruta.plazasOcupadas) >0 AND ruta.origen='" + origin + "' AND ruta.opcion = '0' AND usuario.correo != '"
-					+ "kkk@kkk.com" + "')";
+			String sql = "(SELECT ruta.*, usuario.* FROM ruta JOIN realizaruta ON realizaruta.ruta = ruta.id JOIN usuario ON usuario.correo = realizaruta.usuario WHERE (ruta.plazas - ruta.plazasOcupadas) >0 AND ruta.origen='"
+					+ origin + "' AND ruta.opcion = '0' AND usuario.correo != '" + "kkk@kkk.com" + "')";
 
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
@@ -187,14 +190,14 @@ public class RutaDao {
 		}
 		return lista;
 	}
-	//obtener una ruta dada por su id
-	public Ruta getRoute(int idRoute) throws ServiceException {
 
+	// obtener una ruta dada por su id
+	public Ruta getRoute(int idRoute) throws ServiceException {
 
 		Ruta route = null;
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
-			String sql = "(SELECT * FROM ruta WHERE id="+ idRoute +")";
+			String sql = "(SELECT * FROM ruta WHERE id=" + idRoute + ")";
 			System.out.println("consulta sql: " + sql);
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
@@ -209,7 +212,7 @@ public class RutaDao {
 				route.setPrecio(rs.getDouble("precio"));
 				route.setFechaPublicacion(rs.getDate("fechaPublicacion"));
 				route.setOpcion(rs.getInt("opcion"));
-				
+
 			}
 		} catch (SQLException e) {
 			throw new ServiceException(e.getMessage());

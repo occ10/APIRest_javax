@@ -15,7 +15,6 @@ import Exception.ServiceException;
 
 public class ParkingDao {
 
-	
 	static {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -27,7 +26,7 @@ public class ParkingDao {
 	public static ParkingDao getInstance() {
 		return new ParkingDao();
 	}
-	
+
 	public List<Parking> getAllParkings() throws ServiceException {
 
 		List<Parking> lista = new ArrayList<Parking>();
@@ -55,5 +54,5 @@ public class ParkingDao {
 		}
 		return lista;
 	}
-	
+
 }

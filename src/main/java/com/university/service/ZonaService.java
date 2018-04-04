@@ -11,27 +11,29 @@ import Exception.ServiceException;
 
 public class ZonaService {
 
-	
 	private ZonaDao zonaDao;
-	public  ZonaService(){
-		zonaDao =  ZonaDao.getInstance();
+
+	public ZonaService() {
+		zonaDao = ZonaDao.getInstance();
 	}
-	public List<Zona> getZones(String code) throws ServiceException{ 	 
-		return zonaDao.getAllZones(code); 
+
+	public List<Zona> getZones(String code) throws ServiceException {
+		return zonaDao.getAllZones(code);
 	}
-	
-	public Zona getZone(String code)throws ServiceException{ 	 
-		return zonaDao.getZone(code); 
+
+	public Zona getZone(String code) throws ServiceException {
+		return zonaDao.getZone(code);
 	}
-	
-	public void updateZone(int code)throws ServiceException{
+
+	public void updateZone(int code) throws ServiceException {
 		zonaDao.updateZone(code);
 	}
-	
-	public void desocuppyZone(int code)throws ServiceException{
+
+	public void desocuppyZone(int code) throws ServiceException {
 		zonaDao.desocuppyZone(code);
 	}
-	public Zona userOcuppyZone(String email) throws ServiceException{
+
+	public Zona userOcuppyZone(String email) throws ServiceException {
 		return zonaDao.userOcuppyZone(email);
 	}
 }

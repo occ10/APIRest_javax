@@ -1,7 +1,5 @@
 package com.university.rest;
 
-
-	
 import java.net.URI;
 import java.util.List;
 
@@ -22,127 +20,132 @@ import com.university.model.*;
 import com.university.service.*;
 
 import Exception.ServiceException;
-	@Path("/UserService") 
 
-	public class UserRest {
-		@Context
-		UriInfo uriInfo;
-		UserService userService = new UserService();  
-		@GET 
-		@Path("/users") 
-		@Produces(MediaType.APPLICATION_JSON) 
-		public Response getUsers(){
+@Path("/UserService")
 
-			List<User> usuarios = null;
-			try {
-				usuarios = userService.getUsers();
-				if(usuarios!= null)
-					return Response.ok(usuarios).build();
-				else{
-						return Response.status(Response.Status.NOT_FOUND).build();  
-				}
-			} catch (ServiceException e) {
-				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();	
+public class UserRest {
+	@Context
+	UriInfo uriInfo;
+	UserService userService = new UserService();
+
+	@GET
+	@Path("/users")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUsers() {
+
+		List<User> usuarios = null;
+		try {
+			usuarios = userService.getUsers();
+			if (usuarios != null)
+				return Response.ok(usuarios).build();
+			else {
+				return Response.status(Response.Status.NOT_FOUND).build();
 			}
-
-		}  
-		@POST
-		@Path("/user") 
-		@Produces(MediaType.APPLICATION_JSON) 
-		@Consumes(MediaType.APPLICATION_JSON)
-		public Response getUser(User usuario){
-			Respuesta res = new Respuesta();
-			UserDTO user;
-			try {
-				user = userService.obtenerDatosUser(usuario.getCorreo(),usuario.getContraseña());
-				if(user!= null)
-					return Response.ok(user).build();
-				else{
-					res.setClave("info");
-					res.setValor("los dats no son correctos");
-					System.out.println("usuario no autorizado");
-					return Response.status(Response.Status.UNAUTHORIZED).entity(res).build();
-				}
-			} catch (ServiceException e) {
-				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();	
-			}
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
-	   
-		@GET
-		@Path("/userByMail/{correo}") 
-		@Produces(MediaType.APPLICATION_JSON) 
-		public Response getUserByMail(@PathParam("correo")	String	correo){
-		   //System.out.println("response correct");
-			UserDTO user;
-			try {
-				user = userService.obtenerDatosUserByMail(correo);
-				if(user!= null){
-					return Response.ok(user).build();
-				}
-				else
-					return Response.status(Response.Status.NOT_FOUND).build();  
-			} catch (ServiceException e) {
-				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-			}
-		}
-	   
-		@POST 
-		@Path("/insert") 
-		@Produces(MediaType.APPLICATION_JSON) 
-		@Consumes(MediaType.APPLICATION_JSON)
-		public Response insertUser(User user){
-			user.setFoto("foto");
-			try {
-				UserDTO usuario = userService.insertUser(user);
-				//UserDTO usuario = userService.obtenerDatosUser(user.getCorreo(),user.getContraseña());
-				//URI uri =
-				          //uriInfo.getAbsolutePathBuilder().path("{dni}").build(dni);
-				        //Response.created(uri).build();
-				return Response.status(Response.Status.CREATED).entity(usuario).build();
-			} catch (ServiceException e) {
-				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-			}
 
-		}
-		@PUT 
-		@Path("/updateMail/{correo}") 
-		@Produces(MediaType.APPLICATION_JSON) 
-		@Consumes(MediaType.APPLICATION_JSON)
-		public Response updateMail(@PathParam("correo")	String	correo){
-			System.out.println(correo);
-			try {
-				userService.updateMailUser(correo);
-				return Response.status(Response.Status.NO_CONTENT).build();
-			} catch (ServiceException e) {
-				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-			}
-		}
-		@PUT 
-		@Path("/update") 
-		@Produces(MediaType.APPLICATION_JSON) 
-		@Consumes(MediaType.APPLICATION_JSON)
-		public Response updateUser(User user){ 
-		   
-			try {
-				userService.updateUser(user);
-				return Response.status(Response.Status.NO_CONTENT).build();
-			} catch (ServiceException e) {
-				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-			}
-		} 
-	   
-	   @DELETE
-		@Path("/delete/{correo}") 
-		@Produces(MediaType.APPLICATION_JSON) 
-		@Consumes(MediaType.APPLICATION_JSON)
-		public Response deleteUser(@PathParam("correo")	String	correo){ 
-		    
-		   try {
-			   userService.deleteUser(correo);
-			   return Response.status(Response.Status.NO_CONTENT).build();
-
-		   } catch (ServiceException e) {
-			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-		   }
-	   } 
 	}
+
+	@POST
+	@Path("/user")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getUser(User usuario) {
+		Respuesta res = new Respuesta();
+		UserDTO user;
+		try {
+			user = userService.obtenerDatosUser(usuario.getCorreo(), usuario.getContraseña());
+			if (user != null)
+				return Response.ok(user).build();
+			else {
+				res.setClave("info");
+				res.setValor("los dats no son correctos");
+				System.out.println("usuario no autorizado");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(res).build();
+			}
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@GET
+	@Path("/userByMail/{correo}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserByMail(@PathParam("correo") String correo) {
+		// System.out.println("response correct");
+		UserDTO user;
+		try {
+			user = userService.obtenerDatosUserByMail(correo);
+			if (user != null) {
+				return Response.ok(user).build();
+			} else
+				return Response.status(Response.Status.NOT_FOUND).build();
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@POST
+	@Path("/insert")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response insertUser(User user) {
+		user.setFoto("foto");
+		try {
+			UserDTO usuario = userService.insertUser(user);
+			// UserDTO usuario =
+			// userService.obtenerDatosUser(user.getCorreo(),user.getContraseña());
+			// URI uri =
+			// uriInfo.getAbsolutePathBuilder().path("{dni}").build(dni);
+			// Response.created(uri).build();
+			return Response.status(Response.Status.CREATED).entity(usuario).build();
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+
+	}
+
+	@PUT
+	@Path("/updateMail/{correo}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateMail(@PathParam("correo") String correo) {
+		System.out.println(correo);
+		try {
+			userService.updateMailUser(correo);
+			return Response.status(Response.Status.NO_CONTENT).build();
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@PUT
+	@Path("/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateUser(User user) {
+
+		try {
+			userService.updateUser(user);
+			return Response.status(Response.Status.NO_CONTENT).build();
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@DELETE
+	@Path("/delete/{correo}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteUser(@PathParam("correo") String correo) {
+
+		try {
+			userService.deleteUser(correo);
+			return Response.status(Response.Status.NO_CONTENT).build();
+
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+}
