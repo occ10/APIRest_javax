@@ -84,15 +84,8 @@ public class User implements Serializable {
 		sr.nextBytes(salt);
 
 		PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, PBKDF2_ITERATIONS, HASH_BYTE_SIZE);
-		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1"); // this
-																					// throws
-																					// a
-																					// NoSuchAlgorithmException
-																					// if
-																					// I
-																					// replace
-																					// with
-																					// "PBKDF2WithHmacSHA512"
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1"); 
+		
 		try {
 			hash = skf.generateSecret(spec).getEncoded();
 
@@ -120,15 +113,8 @@ public class User implements Serializable {
 		byte[] decodedHex = DatatypeConverter.parseHexBinary(salt);
 
 		PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), decodedHex, PBKDF2_ITERATIONS, HASH_BYTE_SIZE);
-		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1"); // this
-																					// throws
-																					// a
-																					// NoSuchAlgorithmException
-																					// if
-																					// I
-																					// replace
-																					// with
-																					// "PBKDF2WithHmacSHA512"
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1"); 
+		
 		try {
 			hash = skf.generateSecret(spec).getEncoded();
 
