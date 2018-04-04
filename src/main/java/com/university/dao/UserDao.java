@@ -12,6 +12,8 @@ import java.util.List;
 import com.university.model.*;
 import com.university.service.UserService;
 
+import Exception.ServiceException;
+
 public class UserDao {
 
 	static {
@@ -34,7 +36,7 @@ public class UserDao {
 	 * Confirmado, opcion); }
 	 */
 
-	public boolean insert(User user) {
+	public User insert(User user) throws ServiceException {
 		try {
 
 			try {
@@ -53,17 +55,14 @@ public class UserDao {
 			System.out.println(sql);
 			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
-			if (stmt.getUpdateCount() != 1) {
-				return false;
 
-			}
 		} catch (SQLException e) {
-			return false;
+			throw new ServiceException(e.getMessage());
 		}
-		return true;
+		return getUser(user.getCorreo(), user.getContraseña());
 	}
 
-	public List<User> getAllUsers() {
+	public List<User> getAllUsers() throws ServiceException {
 
 		List<User> lista = new ArrayList<User>();
 		User user;
@@ -89,13 +88,12 @@ public class UserDao {
 				lista.add(user);
 			}
 		} catch (SQLException e) {
-			// System.out.println(e.getMessage() + "Error aqui");
-			return null;
+			throw new ServiceException(e.getMessage());
 		}
 		return lista;
 	}
 
-	public User getUser(String correo, String password) {
+	public User getUser(String correo, String password) throws ServiceException {
 		User user = null;
 
 		try {
@@ -130,17 +128,17 @@ public class UserDao {
 
 					}
 				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
+					throw new ServiceException(e.getMessage());
 				}
 			}
 
 		} catch (SQLException e) {
-			return user;
+			throw new ServiceException(e.getMessage());
 		}
 		return user;
 	}
 
-	public User getUserByMail(String correo) {
+	public User getUserByMail(String correo) throws ServiceException {
 
 		System.out.print("correo es :" + correo);
 		User user = null;
@@ -167,12 +165,12 @@ public class UserDao {
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage() + "Error aqui");
-			return user;
+			throw new ServiceException(e.getMessage());
 		}
 		return user;
 	}
 
-	public boolean update(User user) {
+	public boolean update(User user) throws ServiceException {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
@@ -183,17 +181,14 @@ public class UserDao {
 			System.out.println(sql);
 			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
-			if (stmt.getUpdateCount() != 1) {
-				return false;
 
-			}
 		} catch (SQLException e) {
-			return false;
+			throw new ServiceException(e.getMessage());
 		}
 		return true;
 	}
 
-	public boolean delete(String correo) {
+	public boolean delete(String correo) throws ServiceException {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
@@ -201,17 +196,14 @@ public class UserDao {
 			// System.out.println(sql);
 			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
-			if (stmt.getUpdateCount() != 1) {
-				return false;
 
-			}
 		} catch (SQLException e) {
-			return false;
+			throw new ServiceException(e.getMessage());
 		}
 		return true;
 	}
 
-	public boolean updateMail(String correo) {
+	public boolean updateMail(String correo) throws ServiceException {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
@@ -219,12 +211,9 @@ public class UserDao {
 			System.out.println(sql);
 			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
-			if (stmt.getUpdateCount() != 1) {
-				return false;
 
-			}
 		} catch (SQLException e) {
-			return false;
+			throw new ServiceException(e.getMessage());
 		}
 		return true;
 	}

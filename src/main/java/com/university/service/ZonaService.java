@@ -31,7 +31,7 @@ public class ZonaService {
 	public void desocuppyZone(int code)throws ServiceException{
 		zonaDao.desocuppyZone(code);
 	}
-	public Zona userOcuppyZone(User user) throws ServiceException{
-		return zonaDao.userOcuppyZone(user);
+	public Zona userOcuppyZone(String email) throws ServiceException{
+		return zonaDao.userOcuppyZone(email);
 	}
 }

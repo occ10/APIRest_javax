@@ -13,6 +13,8 @@ import java.util.List;
 
 import com.university.model.*;
 
+import Exception.ServiceException;
+
 public class RutaDao {
 
 	static {
@@ -27,7 +29,7 @@ public class RutaDao {
 		return new RutaDao();
 	}
     //obtener todas las rutas publicadas
-	public List<Ruta> getAllRoutes(String email) {
+	public List<Ruta> getAllRoutes(String email) throws ServiceException {
 
 		List<Ruta> lista = new ArrayList<Ruta>();
 
@@ -70,16 +72,16 @@ public class RutaDao {
 			}
 		} catch (SQLException e) {
 			// System.out.println(e.getMessage() + "Error aqui");
-			return null;
+			throw new ServiceException(e.getMessage());
 		}
 		return lista;
 	}
 
 	//insertar una ruta y poner campo opcion a 1 a las rutas publicadas anteriormente
-	public int insertRoute(Ruta route) {
+	public Ruta insertRoute(Ruta route) throws ServiceException {
 		String sqlTree = "";
 		String sqlOne = "";
-		int lastId = -1;
+		int lastId = 0;
 		Connection connection = null;
 		try {
 
@@ -124,21 +126,21 @@ public class RutaDao {
 					System.out.println(ex.toString());
 				}
 			}
-			return lastId;
+			throw new ServiceException(e.getMessage());
 		} finally {
 			try {
 				if (connection != null) {
 					connection.close();
 				}
 			} catch (SQLException ex) {
-				System.out.println(ex.toString());
+				throw new ServiceException(ex.getMessage());
 			}
 
 		}
-		return lastId;
+		return getRoute(lastId);
 	}
 	//obtener rutas a partir de un origen
-	public List<Ruta> getAllRoutesFromOrigin(String email, String origin) {
+	public List<Ruta> getAllRoutesFromOrigin(String email, String origin) throws ServiceException {
 
 		List<Ruta> lista = new ArrayList<Ruta>();
 
@@ -181,16 +183,15 @@ public class RutaDao {
 			}
 		} catch (SQLException e) {
 			// System.out.println(e.getMessage() + "Error aqui");
-			return null;
+			throw new ServiceException(e.getMessage());
 		}
 		return lista;
 	}
 	//obtener una ruta dada por su id
-	public Ruta getRoute(int idRoute) {
+	public Ruta getRoute(int idRoute) throws ServiceException {
 
 
 		Ruta route = null;
-		User user = null;
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 			String sql = "(SELECT * FROM ruta WHERE id="+ idRoute +")";
@@ -211,8 +212,7 @@ public class RutaDao {
 				
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage() + "Error aqui");
-			return null;
+			throw new ServiceException(e.getMessage());
 		}
 		return route;
 	}

@@ -11,39 +11,41 @@ import javax.activation.*;
 import com.university.dao.*;
 import com.university.model.*;
 
+import Exception.ServiceException;
+
 
 public class UserService {
 	private UserDao userDao;
 	public  UserService(){
 		userDao =  UserDao.getInstance();
 	}
-	public List<User> getUsers(){ 	 
+	public List<User> getUsers() throws ServiceException{ 	 
 	      return userDao.getAllUsers(); 
 	   }
 	
-	public boolean  insertUser(User user){		  
-		return userDao.insert(user);
+	public UserDTO  insertUser(User user) throws ServiceException{		  
+		//userDao.insert(user);
+		//User userResult = userDao.insert(user);
+		return new UserDTO(userDao.insert(user));
 	}
 	
-	public UserDTO obtenerDatosUser(String Correo, String password){
+	public UserDTO obtenerDatosUser(String Correo, String password) throws ServiceException{
 		User user = userDao.getUser(Correo, password);
-		if(user != null)
-		return new UserDTO(user);
-		else 
-			return null;
+		return user != null ? new UserDTO(user) : null;
 	}
-	public UserDTO obtenerDatosUserByMail(String Correo){
+	
+	public UserDTO obtenerDatosUserByMail(String Correo) throws ServiceException{
 		User user = userDao.getUserByMail(Correo);
 		if(user != null)
 		return new UserDTO(user);
 		else 
 			return null;
 	}
-	public boolean updateUser(User user){
+	public boolean updateUser(User user) throws ServiceException{
 		return userDao.update(user);
 	}
 	
-	public boolean deleteUser(String correo){
+	public boolean deleteUser(String correo) throws ServiceException{
 		return userDao.delete(correo);
 	}
 	
@@ -85,7 +87,7 @@ public class UserService {
 			throw new RuntimeException(e);
 		}
 	}
-	public boolean updateMailUser(String correo) {
+	public boolean updateMailUser(String correo) throws ServiceException {
 		// TODO Auto-generated method stub
 		System.out.println(correo);
 		return userDao.updateMail(correo);

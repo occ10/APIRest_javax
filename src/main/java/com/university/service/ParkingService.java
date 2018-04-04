@@ -5,6 +5,8 @@ import java.util.List;
 import com.university.dao.ParkingDao;
 import com.university.model.Parking;
 
+import Exception.ServiceException;
+
 
 public class ParkingService {
 
@@ -13,7 +15,7 @@ public class ParkingService {
 	public  ParkingService(){
 		parkingDao =  parkingDao.getInstance();
 	}
-	public List<Parking> getParkings(){ 	 
+	public List<Parking> getParkings() throws ServiceException{ 	 
 	      return parkingDao.getAllParkings(); 
 	   }
 }

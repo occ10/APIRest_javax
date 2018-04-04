@@ -144,7 +144,7 @@ public class ZonaDao {
 		}
 	}
 	//SELECT `zonass`.`aparcamiento` FROM `zonas` JOIN `usuarioaparcacoche` ON `usuarioaparcacoche`.`zona` = `zonas`.`id` JOIN `coche` ON `usuarioaparcacoche`.`coche` =`coche`.`matricula` WHERE `coche`.`usuario` = 'infochamit@gmail.com' AND `zonas`.`ocupada` = '0'
-	public Zona userOcuppyZone(User user) throws ServiceException{
+	public Zona userOcuppyZone(String email) throws ServiceException{
 		
 		Zona zone = null;
 		try {
@@ -153,7 +153,7 @@ public class ZonaDao {
 			String sql = "SELECT * FROM zonas JOIN usuarioaparcacoche "
 					+ "ON usuarioaparcacoche.zona = zonas.id JOIN coche "
 					+ "ON usuarioaparcacoche.coche =coche.matricula "
-					+ "WHERE coche.usuario = '"+ user.getCorreo() +"' AND zonas.ocupada = '0' "
+					+ "WHERE coche.usuario = '"+ email +"' AND zonas.ocupada = '0' "
 					+ "and fecha = (select max(fecha) from usuarioaparcacoche where zona = zonas.id)" ;
 			System.out.println(sql);
 			Statement stmt = connection.createStatement();

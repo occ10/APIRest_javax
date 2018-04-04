@@ -15,56 +15,61 @@ import javax.ws.rs.core.Response;
 
 import com.university.service.RutaService;
 import com.university.service.UserService;
+
+import Exception.ServiceException;
+
 import com.university.model.*;
 @Path("/RutaService") 
 public class RutaRest {
 
-	   RutaService rutaService = new RutaService();  
-	   @GET 
-	   @Path("/routes/{correo}") 
-	   @Produces(MediaType.APPLICATION_JSON)
-	   public Response getRoutes(@PathParam("correo")	String	correo){
-	   //public Response getRoutes(@PathParam("correo")	String	correo){
-		   List<Ruta> rutas = null;
-		   rutas = rutaService.getRoutes(correo);
-		   if(rutas != null)
-		   return Response.ok(rutas).build();
-		   else
-			   return Response.status(Response.Status.NO_CONTENT).build();  
-	      //return userService.getUsers(); 
-		   //return Response.status(Response.Status.NOT_FOUND).build();
-	   }
+		RutaService rutaService = new RutaService();  
+	   //obtiene todas las rutas publicadas que tienen plazas disponibles
+		@GET 
+		@Path("/routes/{correo}") 
+		@Produces(MediaType.APPLICATION_JSON)
+	    public Response getRoutes(@PathParam("correo")	String	correo){
+			List<Ruta> rutas = null;
+			try {
+				rutas = rutaService.getRoutes(correo);
+				if(rutas != null)
+					return Response.ok(rutas).build();
+				else
+					return Response.status(Response.Status.NOT_FOUND).build(); 
+			}catch (ServiceException e) {
+				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
 	   
-	   @GET 
-	   @Path("/routesOrigine/{correo}") 
-	   @Produces(MediaType.APPLICATION_JSON)
-	   public Response getRoutesFrmOrigine(@PathParam("correo")	String	correo){
-	   //public Response getRoutes(@PathParam("correo")	String	correo){
-		   List<Ruta> rutas = null;
-		   rutas = rutaService.getAllRoutesFromOrigin(correo,"usuario");
-		   if(rutas != null)
-		   return Response.ok(rutas).build();
-		   else
-			   return Response.status(Response.Status.NO_CONTENT).build();
-	   }
+	    @GET 
+	    @Path("/routesOrigine/{correo}") 
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public Response getRoutesFrmOrigine(@PathParam("correo")	String	correo){
+	    //public Response getRoutes(@PathParam("correo")	String	correo){
+	    	List<Ruta> rutas = null;
+		    try{
+		    rutas = rutaService.getAllRoutesFromOrigin(correo,"Elche");
+		    if(rutas != null)
+		    	return Response.ok(rutas).build();
+		    else
+		    	return Response.status(Response.Status.NOT_FOUND).build(); 
+		    } catch (ServiceException e) {
+		    	return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		    }
+	    }
 
-	   @POST
-	   @Path("/insertRoute") 
-	   @Produces(MediaType.APPLICATION_JSON)
-	   @Consumes(MediaType.APPLICATION_JSON)
-	   public Response insertRoute(Ruta route){
+	    @POST
+	    @Path("/insertRoute") 
+	    @Produces(MediaType.APPLICATION_JSON)
+	    @Consumes(MediaType.APPLICATION_JSON)
+	    public Response insertRoute(Ruta route){
 		  
-           int idRoute = rutaService.insertRoute(route);
-           boolean result = false;
-           Ruta routeResult = null;
-		   if(idRoute != -1){	
-			   System.out.println("el anuncio se ha insertado correctamente");
-			   routeResult = rutaService.getRoute(idRoute);
-			   if(routeResult != null){
-				   result = true;	
-				   System.out.println(routeResult.getDetalles());
-			   }
-		   }
-		   return result == true ? Response.status(Response.Status.CREATED).entity(routeResult).build() : Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-	   }
+	    	try{
+	    		Ruta routeResult = rutaService.insertRoute(route);
+	    			//return Response.ok(routeResult).build();
+	    			return Response.status(Response.Status.CREATED).entity(routeResult).build();
+				   
+	    	}catch(ServiceException e){
+	    		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();	        	   
+	    	}
+	    }
 }

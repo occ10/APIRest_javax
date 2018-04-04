@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.sun.jersey.api.NotFoundException;
 import com.university.model.Respuesta;
 import com.university.model.User;
 import com.university.model.Zona;
@@ -23,86 +24,83 @@ import Exception.ServiceException;
 @Path("/ZonaService") 
 public class ZonaRest {	
 	ZonaService zonaService = new ZonaService();  
-	   @GET 
-	   @Path("/zonas/{code}") 
-	   @Produces(MediaType.APPLICATION_JSON)
-	   public Response getZones(@PathParam("code")	String	code){
-		   List<Zona> areas = null;
-		   try {
-			   areas = zonaService.getZones(code);
-			if(areas != null)
-			    return Response.ok(areas).build();
-			else
-				return Response.status(Response.Status.NO_CONTENT).build();
-		   } catch (ServiceException e) {
-			    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-		   }
-	   }
-	   @GET 
-	   @Path("/zona/{code}") 
-	   @Produces(MediaType.APPLICATION_JSON)
-	   public Response getZone(@PathParam("code")	String	code){
-		   Zona zone = null;
-		   try{
-			   zone = zonaService.getZone(code);
-			   if(zone != null)
-				   return Response.ok(zone).build();
-			   else
-				   return Response.status(Response.Status.NO_CONTENT).build();
-		   }catch (ServiceException e) {
-			    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-		   }
-
-	   }
+		@GET 
+	    @Path("/zonas/{code}") 
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public Response getZones(@PathParam("code")	String	code){
+			List<Zona> areas = null;
+			try {
+				areas = zonaService.getZones(code);
+				if(areas != null)
+					return Response.ok(areas).build();
+				else
+					return Response.status(Response.Status.NOT_FOUND).build();
+			} catch (ServiceException e) {
+				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+			}
+		}
+	    @GET 
+	    @Path("/zona/{code}") 
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public Response getZone(@PathParam("code")	String	code){
+	    	Zona zone = null;
+	    	try{
+	    		zone = zonaService.getZone(code);
+	    		if(zone != null)
+	    			return Response.ok(zone).build();
+	    		else
+	    			return Response.status(Response.Status.NOT_FOUND).build();
+	    	}catch (ServiceException e) {
+	    		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+	    	}
+	    }
 	   
-	   @PUT 
-	   @Path("/updateZone") 
-	   @Produces(MediaType.APPLICATION_JSON)
-	   @Consumes(MediaType.APPLICATION_JSON)
-	   public Response updateZone(Zona zona){
-		   System.out.println(zona.getId());
+	    @PUT 
+	    @Path("/updateZone") 
+	    @Produces(MediaType.APPLICATION_JSON)
+	    @Consumes(MediaType.APPLICATION_JSON)
+	    public Response updateZone(Zona zona){
 		   
-		   try{
-			   zonaService.updateZone(zona.getId());
-			   return Response.status(Response.Status.NO_CONTENT).build();
+	    	try{
+	    		zonaService.updateZone(zona.getId());
+	    		return Response.status(Response.Status.NO_CONTENT).build();
 				   
-		   }catch(ServiceException e){
-			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		   
-		   }
-
-	   }
+	    	}catch(ServiceException e){
+	    		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		   
+	    	}
+	    }
 	   
-	   @PUT 
-	   @Path("/desocuppyZone") 
-	   @Produces(MediaType.APPLICATION_JSON)
-	   @Consumes(MediaType.APPLICATION_JSON)
-	   public Response desocuppyZone(Zona zona){
-		   System.out.println(zona.getId());
-		   try{
-			   zonaService.desocuppyZone(zona.getId());
-			   return Response.status(Response.Status.NO_CONTENT).build();   
-		   }catch(ServiceException e){
-			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-		   }
-	   }
+	    @PUT 
+	    @Path("/desocuppyZone") 
+	    @Produces(MediaType.APPLICATION_JSON)
+	    @Consumes(MediaType.APPLICATION_JSON)
+	    public Response desocuppyZone(Zona zona){
+	    	
+	    	try{
+	    		zonaService.desocuppyZone(zona.getId());
+	    		return Response.status(Response.Status.NO_CONTENT).build();   
+	    	}catch(ServiceException e){
+	    		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+	    	}
+	    }
 	   
-	   @POST 
-	   @Path("/userOcuppyZone") 
-	   @Produces(MediaType.APPLICATION_JSON)
-	   @Consumes(MediaType.APPLICATION_JSON)
-	   public Response userOcuppyZone(User user){
+	    @GET
+	    @Path("/userOcuppyZone/{email}") 
+	    @Produces(MediaType.APPLICATION_JSON)
+	    @Consumes(MediaType.APPLICATION_JSON)
+	    public Response userOcuppyZone(@PathParam("email")	String	email){
 		   
-		   try{
-			   Zona zone = zonaService.userOcuppyZone(user);
-			   if(zone != null){
-				   System.out.println("zona aparcamiento:" + zone.getAparcamiento());
-				   return Response.ok(zone).build();
-			   }else
-				   return Response.status(Response.Status.NO_CONTENT).build();		   
+	    	try{
+	    		Zona zone = zonaService.userOcuppyZone(email);
+	    		if(zone != null){
+	    			System.out.println("zona aparcamiento:" + zone.getAparcamiento());
+	    			return Response.ok(zone).build();
+	    		}else
+	    			System.out.println("usuario no ocupa zona");
+	    			return Response.status(Response.Status.NOT_FOUND).build();		   
 			   
-		   }catch(ServiceException e){	   
-			   return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-		   }
-
-	   }
+	    	}catch(ServiceException e){	   
+	    		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+	    	}
+	    }
 }

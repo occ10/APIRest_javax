@@ -11,6 +11,8 @@ import java.util.List;
 import com.university.model.Parking;
 import com.university.model.User;
 
+import Exception.ServiceException;
+
 public class ParkingDao {
 
 	
@@ -26,7 +28,7 @@ public class ParkingDao {
 		return new ParkingDao();
 	}
 	
-	public List<Parking> getAllParkings() {
+	public List<Parking> getAllParkings() throws ServiceException {
 
 		List<Parking> lista = new ArrayList<Parking>();
 		Parking parking;
@@ -48,8 +50,8 @@ public class ParkingDao {
 				lista.add(parking);
 			}
 		} catch (SQLException e) {
-			// System.out.println(e.getMessage() + "Error aqui");
-			return null;
+			throw new ServiceException(e.getMessage());
+
 		}
 		return lista;
 	}
