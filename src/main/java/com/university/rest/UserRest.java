@@ -52,7 +52,7 @@ public class UserRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getUser(User usuario) {
-		Respuesta res = new Respuesta();
+		Respond res = new Respond();
 		UserDTO user;
 		try {
 			user = userService.obtenerDatosUser(usuario.getCorreo(), usuario.getContraseña());
