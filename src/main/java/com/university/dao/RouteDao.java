@@ -155,7 +155,7 @@ public class RouteDao {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 			String sql = "(SELECT ruta.*, usuario.* FROM ruta JOIN realizaruta ON realizaruta.ruta = ruta.id JOIN usuario ON usuario.correo = realizaruta.usuario WHERE (ruta.plazas - ruta.plazasOcupadas) >0 AND ruta.origen='"
-					+ origin + "' AND ruta.opcion = '0' AND usuario.correo != '" + "kkk@kkk.com" + "')";
+					+ origin + "' AND ruta.opcion = '0' AND usuario.correo != '" + email + "')";
 
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);

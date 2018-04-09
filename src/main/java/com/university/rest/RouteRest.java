@@ -43,13 +43,13 @@ public class RouteRest {
 	}
 
 	@GET
-	@Path("/routesOrigine/{correo}")
+	@Path("/routesOrigine/{correo}/{origine}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getRoutesFrmOrigine(@PathParam("correo") String correo) {
+	public Response getRoutesFrmOrigine(@PathParam("correo") String correo, @PathParam("origine") String origine) {
 		// public Response getRoutes(@PathParam("correo") String correo){
 		List<Route> routes = null;
 		try {
-			routes = routeService.getAllRoutesFromOrigin(correo, "Elche");
+			routes = routeService.getAllRoutesFromOrigin(correo, origine);
 			if (routes != null)
 				return Response.ok(routes).build();
 			else

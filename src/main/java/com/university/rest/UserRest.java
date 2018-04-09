@@ -56,9 +56,9 @@ public class UserRest {
 		UserDTO user;
 		try {
 			user = userService.obtenerDatosUser(usuario.getCorreo(), usuario.getContraseña());
-			if (user != null)
+			if (user != null){
 				return Response.ok(user).build();
-			else {
+			}else {
 				res.setClave("info");
 				res.setValor("los dats no son correctos");
 				System.out.println("usuario no autorizado");

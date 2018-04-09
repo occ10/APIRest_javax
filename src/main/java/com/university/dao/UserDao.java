@@ -94,19 +94,20 @@ public class UserDao {
 	}
 
 	public User getUser(String correo, String password) throws ServiceException {
-		User user = null;
-
+		User user = new User();
+		System.out.println("inicio session llamada al dao");
 		try {
+
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
 			String sql = "select contraseña,salt from usuario where correo=" + "'" + correo + "'";
 			Statement stmtone = connection.createStatement();
 			ResultSet rsone = stmtone.executeQuery(sql);
 			if (rsone.next()) {
-				user = new User();
+				
 				try {
 					if (user.getPassword(password, rsone.getString("contraseña"), rsone.getString("salt"))) {
-
+						System.out.println("Los datos son correctos");
 						String sqltow = "select * from usuario where correo=" + "'" + correo + "'";
 						// System.out.println(sql2);
 						Statement stmttow = connection.createStatement();
@@ -126,7 +127,8 @@ public class UserDao {
 							user.setOpcion(rstow.getInt("opcion"));
 						}
 
-					}
+					}else
+						return null;
 				} catch (NoSuchAlgorithmException e) {
 					throw new ServiceException(e.getMessage());
 				}

@@ -32,7 +32,12 @@ public class UserService {
 
 	public UserDTO obtenerDatosUser(String Correo, String password) throws ServiceException {
 		User user = userDao.getUser(Correo, password);
-		return user != null ? new UserDTO(user) : null;
+		UserDTO userDTO = null;
+		if(user == null)
+			System.out.println("usuario nuloooooo");
+		else
+			System.out.println("usuario " + user.getCorreo());
+		return userDTO = user != null ? new UserDTO(user) : null;
 	}
 
 	public UserDTO obtenerDatosUserByMail(String Correo) throws ServiceException {
