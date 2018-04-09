@@ -107,7 +107,6 @@ public class UserDao {
 				
 				try {
 					if (user.getPassword(password, rsone.getString("contraseña"), rsone.getString("salt"))) {
-						System.out.println("Los datos son correctos");
 						String sqltow = "select * from usuario where correo=" + "'" + correo + "'";
 						// System.out.println(sql2);
 						Statement stmttow = connection.createStatement();
