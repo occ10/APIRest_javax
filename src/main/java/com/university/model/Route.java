@@ -15,6 +15,10 @@ public class Route {
 	private UserDTO user;
 	private Car car;
 
+	public Route() {
+		super();
+	}
+	
 	public Route(int id, int plazas, int plazasOcupadas, String origen, String detalles, double precio,
 			java.sql.Date fechaPublicacion, int opcion, UserDTO user, Car car) {
 		super();
@@ -36,9 +40,6 @@ public class Route {
 
 	public void setCar(Car car) {
 		this.car = car;
-	}
-
-	public Route() {
 	}
 
 	public Route(int id, int plazas, int plazasOcupadas, String origen, String detalles, double precio,

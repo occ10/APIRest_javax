@@ -111,6 +111,7 @@ public class UserDao {
 						// System.out.println(sql2);
 						Statement stmttow = connection.createStatement();
 						ResultSet rstow = stmttow.executeQuery(sqltow);
+						
 						// System.out.println("excute " + rs2.next());
 						if (rstow.next()) {
 							user.setCorreo(rstow.getString("correo"));
@@ -131,7 +132,8 @@ public class UserDao {
 				} catch (NoSuchAlgorithmException e) {
 					throw new ServiceException(e.getMessage());
 				}
-			}
+			}else
+				return null;
 
 		} catch (SQLException e) {
 			throw new ServiceException(e.getMessage());

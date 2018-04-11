@@ -14,6 +14,11 @@ public class UserDTO implements Serializable {
 	private String Confirmado;
 	private int opcion;
 
+	
+	public UserDTO() {
+		super();
+	}
+	
 	public UserDTO(User user) {
 		super();
 		this.correo = user.getCorreo();
