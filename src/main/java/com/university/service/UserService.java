@@ -56,7 +56,7 @@ public class UserService {
 		return userDao.delete(correo);
 	}
 
-	public static void sendMail(String sendTo) {
+	public static void sendMail(String sendTo) throws ServiceException {
 
 		final String username = "infochamit@gmail.com";
 		final String password = "Rector3174";
@@ -82,19 +82,17 @@ public class UserService {
 			message.setSubject("Testing Subject");
 			// message.setText("Dear Mail Crawler," + "\n\n No spam to my email,
 			// please!");
-			message.setContent("<h1>This is actual message</h1>", "text/html");
+			message.setContent("<p>haga click en el enlace abajo para activar tu cuenta, y poder utilizar la aplicacion </p><a href='http://localhost:8080/tfg/rest/UserService/updateMail/" + sendTo + "'>Confirm register</a>", "text/html");
 			Transport.send(message);
 
 			System.out.println("Done");
 
 		} catch (MessagingException e) {
-			throw new RuntimeException(e);
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
-	public boolean updateMailUser(String correo) throws ServiceException {
-		// TODO Auto-generated method stub
-		System.out.println(correo);
-		return userDao.updateMail(correo);
+	public void updateMailUser(String correo) throws ServiceException {
+		userDao.updateMail(correo);
 	}
 }

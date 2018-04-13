@@ -94,6 +94,7 @@ public class UserRest {
 		user.setFoto("foto");
 		try {
 			UserDTO usuario = userService.insertUser(user);
+			userService.sendMail(usuario.getCorreo());
 			// UserDTO usuario =
 			// userService.obtenerDatosUser(user.getCorreo(),user.getContraseña());
 			// URI uri =
@@ -106,15 +107,15 @@ public class UserRest {
 
 	}
 
-	@PUT
+	@GET
 	@Path("/updateMail/{correo}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_HTML)
 	public Response updateMail(@PathParam("correo") String correo) {
-		System.out.println(correo);
+		String content = "<html> " + "<title>" + "Hello Jersey" + "</title>"
+		        + "<body><h1>" + "La confirmacion se ha hecho correctamente" + "</h1></body>" + "</html> ";
 		try {
 			userService.updateMailUser(correo);
-			return Response.status(Response.Status.NO_CONTENT).build();
+			return Response.ok(content).build();
 		} catch (ServiceException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
@@ -148,4 +149,5 @@ public class UserRest {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+	
 }

@@ -30,4 +30,8 @@ public class RouteService {
 	public List<Route> getAllRoutesFromOrigin(String email, String origin) throws ServiceException {
 		return routeDao.getAllRoutesFromOrigin(email, origin);
 	}
+	
+	public List<Route> getUserRoutes(String email) throws ServiceException {
+		return routeDao.getUserRoutes(email);
+	}
 }

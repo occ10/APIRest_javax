@@ -47,32 +47,6 @@ public class User implements Serializable {
 		this.opcion = opcion;
 	}
 
-	public String PasswordCrypted(String password) {
-
-		try {
-			MessageDigest md;
-			md = MessageDigest.getInstance("SHA-512");
-			String s = "";
-			md.update(password.getBytes());
-			byte[] mb = md.digest();
-			String out = "";
-			for (int i = 0; i < mb.length; i++) {
-				byte temp = mb[i];
-				s = Integer.toHexString(new Byte(temp));
-				while (s.length() < 2) {
-					s = "0" + s;
-				}
-				s = s.substring(s.length() - 2);
-				out += s;
-			}
-			String uniqueID = UUID.randomUUID().toString();
-
-		} catch (NoSuchAlgorithmException e) {
-
-		}
-		return "";
-	}
-
 	public void getSalt1(String password) throws NoSuchAlgorithmException {
 		byte[] hash = null;
 		// Always use a SecureRandom generator
@@ -124,14 +98,9 @@ public class User implements Serializable {
 		}
 		String hashHex = DatatypeConverter.printHexBinary(hash);
 
-		// System.out.println(hashHex);
-		// System.out.println(hexPassword);
 		boolean correcto = hashHex.equalsIgnoreCase(hexPassword);
 
 		return correcto;
-
-		// return salt
-		// return salt;
 	}
 
 	public static final String toHex(final byte[] data) {

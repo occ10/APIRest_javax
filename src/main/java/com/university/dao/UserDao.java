@@ -28,15 +28,10 @@ public class UserDao {
 		return new UserDao();
 	}
 
-	/*
-	 * public User create(String correo, String nombre, String apellido, int
-	 * edad, String contraseña, String telefono, String salt, String foto,
-	 * String detalles, String Confirmado, int opcion) { return new User(correo,
-	 * nombre, apellido, edad, contraseña, telefono, salt, foto, detalles,
-	 * Confirmado, opcion); }
-	 */
-
 	public User insert(User user) throws ServiceException {
+		
+		Connection connection = null;
+		User userResult = null;
 		try {
 
 			try {
@@ -46,8 +41,9 @@ public class UserDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
-
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+			connection.setAutoCommit(false);
+			
 			String sql = "insert into usuario (correo, nombre, apellido, edad, contraseña, telefono, salt, foto, detalles) values ("
 					+ "'" + user.getCorreo() + "'," + "'" + user.getNombre() + "'," + "'" + user.getApellido() + "',"
 					+ user.getEdad() + "," + "'" + user.getContraseña() + "'," + "'" + user.getTelefono() + "'," + "'"
@@ -55,11 +51,46 @@ public class UserDao {
 			System.out.println(sql);
 			Statement stmt = connection.createStatement();
 			stmt.execute(sql);
-
+			
+			String sqlTow = "select * from usuario where correo=" + "'" + user.getCorreo() + "'";
+			Statement stmtTow = connection.createStatement();
+			ResultSet rs= stmtTow.executeQuery(sqlTow);
+			if (rs.next()) {
+				userResult = new User();
+				userResult.setCorreo(rs.getString("correo"));
+				userResult.setNombre(rs.getString("nombre"));
+				userResult.setApellido(rs.getString("apellido"));
+				userResult.setEdad(rs.getInt("edad"));
+				userResult.setContraseña(rs.getString("contraseña"));
+				userResult.setTelefono(rs.getString("telefono"));
+				userResult.setSalt(rs.getString("salt"));
+				userResult.setFoto(rs.getString("foto"));
+				userResult.setDetalles(rs.getString("detalles"));
+				userResult.setConfirmado(rs.getString("confirmado"));
+				userResult.setOpcion(rs.getInt("opcion"));
+			}
+			
+			connection.commit();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage().toString());
+			if (connection != null) {
+				try {
+					connection.rollback();
+				} catch (SQLException ex) {
+					System.out.println(ex.toString());
+				}
+			}
 			throw new ServiceException(e.getMessage());
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException ex) {
+				throw new ServiceException(ex.getMessage());
+			}
 		}
-		return getUser(user.getCorreo(), user.getContraseña());
+		return userResult;
 	}
 
 	public List<User> getAllUsers() throws ServiceException {
@@ -104,7 +135,7 @@ public class UserDao {
 			Statement stmtone = connection.createStatement();
 			ResultSet rsone = stmtone.executeQuery(sql);
 			if (rsone.next()) {
-				
+				System.out.println("excute usuario existe");
 				try {
 					if (user.getPassword(password, rsone.getString("contraseña"), rsone.getString("salt"))) {
 						String sqltow = "select * from usuario where correo=" + "'" + correo + "'";
@@ -114,6 +145,7 @@ public class UserDao {
 						
 						// System.out.println("excute " + rs2.next());
 						if (rstow.next()) {
+							System.out.println("excute usuario correcto");
 							user.setCorreo(rstow.getString("correo"));
 							user.setNombre(rstow.getString("nombre"));
 							user.setApellido(rstow.getString("apellido"));
@@ -206,7 +238,7 @@ public class UserDao {
 		return true;
 	}
 
-	public boolean updateMail(String correo) throws ServiceException {
+	public void updateMail(String correo) throws ServiceException {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
@@ -218,6 +250,5 @@ public class UserDao {
 		} catch (SQLException e) {
 			throw new ServiceException(e.getMessage());
 		}
-		return true;
 	}
 }

@@ -27,12 +27,12 @@ public class RouteRest {
 
 	// obtiene todas las rutas publicadas que tienen plazas disponibles
 	@GET
-	@Path("/routes/{correo}")
+	@Path("/routes/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getRoutes(@PathParam("correo") String correo) {
+	public Response getRoutes(@PathParam("email") String email) {
 		List<Route> routes = null;
 		try {
-			routes = routeService.getRoutes(correo);
+			routes = routeService.getRoutes(email);
 			if (routes != null)
 				return Response.ok(routes).build();
 			else
@@ -43,13 +43,30 @@ public class RouteRest {
 	}
 
 	@GET
-	@Path("/routesOrigine/{correo}/{origine}")
+	@Path("/routesOrigine/{email}/{origine}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getRoutesFrmOrigine(@PathParam("correo") String correo, @PathParam("origine") String origine) {
+	public Response getRoutesFrmOrigine(@PathParam("email") String email, @PathParam("origine") String origine) {
 		// public Response getRoutes(@PathParam("correo") String correo){
 		List<Route> routes = null;
 		try {
-			routes = routeService.getAllRoutesFromOrigin(correo, origine);
+			routes = routeService.getAllRoutesFromOrigin(email, origine);
+			if (routes != null)
+				return Response.ok(routes).build();
+			else
+				return Response.status(Response.Status.NOT_FOUND).build();
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GET
+	@Path("/routesUser/{email}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getRoutesUser(@PathParam("email") String email) {
+		// public Response getRoutes(@PathParam("correo") String correo){
+		List<Route> routes = null;
+		try {
+			routes = routeService.getUserRoutes(email);
 			if (routes != null)
 				return Response.ok(routes).build();
 			else
