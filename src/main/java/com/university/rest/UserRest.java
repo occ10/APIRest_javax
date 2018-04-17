@@ -1,10 +1,13 @@
 package com.university.rest;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -16,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 import com.university.model.*;
 import com.university.service.*;
 
@@ -134,6 +139,35 @@ public class UserRest {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+	
+	@POST
+	@Path("/saveFile")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile(		
+			@FormDataParam("file") InputStream uploadedInputStream,
+			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+		System.out.print("");
+		String UPLOAD_FOLDER = "c:/uploadedFiles/";
+		// check if all form parameters are provided
+		if (uploadedInputStream == null || fileDetail == null)
+			return Response.status(400).entity("Invalid form data").build();
+		// create our destination folder, if it not exists
+		try {
+			userService.createFolderIfNotExists(UPLOAD_FOLDER);
+		} catch (SecurityException se) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity("Can not create destination folder on server")
+					.build();
+		}
+		String uploadedFileLocation = UPLOAD_FOLDER + fileDetail.getFileName();
+		try {
+			userService.saveToFile(uploadedInputStream, uploadedFileLocation);
+		} catch (IOException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Can not save file").build();
+		}
+		return Response.ok("File saved to " + uploadedFileLocation).build();
+	}
+
 
 	@DELETE
 	@Path("/delete/{correo}")

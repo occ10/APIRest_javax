@@ -211,7 +211,7 @@ public class UserDao {
 
 			String sql = "update usuario set " + "correo=" + "'" + user.getCorreo() + "'," + "nombre=" + "'"
 					+ user.getNombre() + "'," + "apellido=" + "'" + user.getApellido() + "'," + "edad=" + user.getEdad()
-					+ "," + "telefono=" + "'" + user.getTelefono() + "'," + "foto=" + "'" + user.getFoto() + "',"
+					+ "," + "telefono=" + "'" + user.getTelefono() +  "',"
 					+ "detalles=" + "'" + user.getDetalles() + "'" + "where correo=" + "'" + user.getCorreo() + "'";
 			System.out.println(sql);
 			Statement stmt = connection.createStatement();
