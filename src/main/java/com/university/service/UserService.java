@@ -61,6 +61,10 @@ public class UserService {
 		return userDao.delete(correo);
 	}
 
+	public boolean updateImage(String email, String path) throws ServiceException {
+		return userDao.updateImage(email, path);
+	}
+	
 	public static void sendMail(String sendTo) throws ServiceException {
 
 		final String username = "infochamit@gmail.com";
@@ -97,18 +101,18 @@ public class UserService {
 		}
 	}
 
-	public void updateMailUser(String correo) throws ServiceException {
-		userDao.updateMail(correo);
+	public void updateMailUser(String email) throws ServiceException {
+		userDao.updateMail(email);
+	}
+	public String getPathImage(String email) throws ServiceException {
+		return userDao.getPathImage(email);
 	}
 	
-	/**
-	 * Utility method to save InputStream data to target location/file
-	 * 
-	 * @param inStream
-	 *            - InputStream to be saved
-	 * @param target
-	 *            - full path to destination file
-	 */
+	public boolean deleteImage(String email) throws ServiceException {
+		return userDao.deleteImage(email);
+	}
+	
+	
 	public void saveToFile(InputStream inStream, String target)
 			throws IOException {
 		OutputStream out = null;
@@ -121,14 +125,7 @@ public class UserService {
 		out.flush();
 		out.close();
 	}
-	/**
-	 * Creates a folder to desired location if it not already exists
-	 * 
-	 * @param dirName
-	 *            - full path to the folder
-	 * @throws SecurityException
-	 *             - in case you don't have permission to create the folder
-	 */
+
 	public void createFolderIfNotExists(String dirName)
 			throws SecurityException {
 		File theDir = new File(dirName);

@@ -222,7 +222,54 @@ public class UserDao {
 		}
 		return true;
 	}
+	
+	public boolean updateImage(String email, String path) throws ServiceException {
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
+			String sql = "update usuario set " + "foto='" + path + "'" + "where correo=" + "'" + email + "'";
+			Statement stmt = connection.createStatement();
+			stmt.execute(sql);
+
+		} catch (SQLException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return true;
+	}
+	
+	public boolean deleteImage(String email) throws ServiceException {
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+
+			String sql = "update usuario set " + "foto='' where correo=" + "'" + email + "'";
+			Statement stmt = connection.createStatement();
+			stmt.execute(sql);
+
+		} catch (SQLException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return true;
+	}
+	
+	
+	public String getPathImage(String email) throws ServiceException {
+		String path = "";
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+
+			String sql = "select foto from usuario where correo=" + "'" + email + "'";
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if(rs.next()){
+				path = rs.getString("foto");
+			}
+
+		} catch (SQLException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return path;
+	}
+	
 	public boolean delete(String correo) throws ServiceException {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");

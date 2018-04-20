@@ -1,5 +1,7 @@
 package com.university.rest;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -17,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
@@ -140,21 +143,25 @@ public class UserRest {
 		}
 	}
 	
-	@POST
+	@PUT
 	@Path("/saveFile")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(		
-			@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail) {
-		System.out.print("");
+			@FormDataParam("uploaded_file") InputStream uploadedInputStream,
+			@FormDataParam("uploaded_file") FormDataContentDisposition fileDetail,
+			@FormDataParam("email") String email) {
+		System.out.println(fileDetail.getFileName());
 		String UPLOAD_FOLDER = "c:/uploadedFiles/";
 		// check if all form parameters are provided
-		if (uploadedInputStream == null || fileDetail == null)
-			return Response.status(400).entity("Invalid form data").build();
+		if (uploadedInputStream == null || fileDetail == null){
+			System.out.println("error 400");
+			return Response.status(Response.Status.BAD_REQUEST).entity("Invalid form data").build();
+		}
 		// create our destination folder, if it not exists
 		try {
 			userService.createFolderIfNotExists(UPLOAD_FOLDER);
 		} catch (SecurityException se) {
+			System.out.println("Can not create destination folder on server");
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity("Can not create destination folder on server")
 					.build();
@@ -162,21 +169,71 @@ public class UserRest {
 		String uploadedFileLocation = UPLOAD_FOLDER + fileDetail.getFileName();
 		try {
 			userService.saveToFile(uploadedInputStream, uploadedFileLocation);
+			userService.updateImage(email, uploadedFileLocation);
+			
 		} catch (IOException e) {
+			System.out.println("Can not save file: " + e.getMessage());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Can not save file").build();
+		} catch (ServiceException e) {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Can not save file").build();
 		}
-		return Response.ok("File saved to " + uploadedFileLocation).build();
+			return Response.ok("File saved to " + uploadedFileLocation).build();
 	}
 
-
-	@DELETE
-	@Path("/delete/{correo}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@GET
+	@Path("/getImage/{email}")
+	@Produces({"image/*"})
+	public Response getFullImage(@PathParam("email") String email) {
+		
+		try {
+			String path = userService.getPathImage(email);
+			if(!path.equals("") && !path.equals(null)){
+				System.out.println("path:" + path);
+				//String imageFile = "C:/uploadedFiles/71mv2ecGuBL.jpg";
+				File file = new File(path);
+				String fileName = path.substring(path.lastIndexOf("/")+1);
+				  ResponseBuilder response = Response.ok((Object) file);
+				  response.header("Content-Disposition",
+				   "attachment; filename=" + fileName);
+				  return response.build();
+			}else{
+				return Response.status(Response.Status.NOT_FOUND).build();
+			}
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Can not find file").build();
+		}
+		 
+	}
+	
+	@PUT
+	@Path("/deleteImage")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteUser(@PathParam("correo") String correo) {
+	public Response deleteImage(User user) {
 
 		try {
-			userService.deleteUser(correo);
+			String email = user.getCorreo();
+			String path = userService.getPathImage(email);
+			File file = new File(path);
+			if(file.delete()){
+    			System.out.println(file.getName() + " is deleted!");
+    			userService.deleteImage(email);
+    			return Response.status(Response.Status.NO_CONTENT).build();			
+			}else
+				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@DELETE
+	@Path("/delete/{email}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteUser(@PathParam("email") String email) {
+
+		try {
+			userService.deleteUser(email);
 			return Response.status(Response.Status.NO_CONTENT).build();
 
 		} catch (ServiceException e) {
