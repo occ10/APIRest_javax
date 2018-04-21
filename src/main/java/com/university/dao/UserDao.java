@@ -39,7 +39,7 @@ public class UserDao {
 				// System.out.println("salt: "+ user.getSalt());
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new ServiceException(e.getMessage());
 			}
 			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 			connection.setAutoCommit(false);

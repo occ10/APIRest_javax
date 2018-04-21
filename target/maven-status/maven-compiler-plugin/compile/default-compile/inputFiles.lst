@@ -2,12 +2,15 @@ C:\Users\walid\workspace\fingrado\src\main\java\com\university\rest\ZoneRest.jav
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\service\ZoneService.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\service\ParkingService.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\rest\ParkingRest.java
+C:\Users\walid\workspace\fingrado\src\main\java\com\university\rest\CarRest.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\model\Respond.java
+C:\Users\walid\workspace\fingrado\src\main\java\com\university\dao\CarDao.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\dao\UserDao.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\rest\CommentRest.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\service\RouteService.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\model\Announcement.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\service\UserService.java
+C:\Users\walid\workspace\fingrado\src\main\java\com\university\service\CarService.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\model\Comment.java
 C:\Users\walid\workspace\fingrado\src\main\java\Exception\ServiceException.java
 C:\Users\walid\workspace\fingrado\src\main\java\com\university\service\CommentService.java
