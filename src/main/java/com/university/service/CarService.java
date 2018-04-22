@@ -23,4 +23,12 @@ public class CarService {
 	public String getPathImage(String email) throws ServiceException {
 		return carDao.getPathImage(email);
 	}
+	
+	public void deleteCar(String email) throws ServiceException {
+			carDao.deleteCar(email);
+	}
+	public void updateImage(String email, String path) throws ServiceException {
+			carDao.updateImage(email, path);
+	}
+	
 }

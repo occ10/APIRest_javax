@@ -187,7 +187,8 @@ public class UserRest {
 		
 		try {
 			String path = userService.getPathImage(email);
-			if(!path.equals("") && !path.equals(null)){
+			System.out.println("email path:" + email + ":" + path);
+			if(path != null && !path.isEmpty()){
 				System.out.println("path:" + path);
 				//String imageFile = "C:/uploadedFiles/71mv2ecGuBL.jpg";
 				File file = new File(path);

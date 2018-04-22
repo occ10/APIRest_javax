@@ -71,7 +71,7 @@ public class CarDao {
 	
 	
 	public Car getCar(String email) throws ServiceException {
-		
+		System.out.println("call to get carDao");
 		Connection connection = null;
 		Car carResult = null;
 		try {
@@ -110,7 +110,7 @@ public class CarDao {
 	}
 	
 	public String getPathImage(String email) throws ServiceException {
-		String path = "";
+		String path = null;
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
@@ -125,5 +125,32 @@ public class CarDao {
 			throw new ServiceException(e.getMessage());
 		}
 		return path;
+	}
+	
+	public void deleteCar(String email) throws ServiceException {
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+
+			String sql = "delete from coche where usuario=" + "'" + email + "'";
+			Statement stmt = connection.createStatement();
+			stmt.execute(sql);
+
+		} catch (SQLException e) {
+			throw new ServiceException(e.getMessage());
+		}
+	}
+	
+	public void updateImage(String email, String path) throws ServiceException {
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+
+			String sql = "update coche set " + "imageFoto='" + path + "'" + "where usuario=" + "'" + email + "'";
+			Statement stmt = connection.createStatement();
+			stmt.execute(sql);
+
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			throw new ServiceException(e.getMessage());
+		}
 	}
 }

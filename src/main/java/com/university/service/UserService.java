@@ -61,8 +61,8 @@ public class UserService {
 		return userDao.delete(correo);
 	}
 
-	public boolean updateImage(String email, String path) throws ServiceException {
-		return userDao.updateImage(email, path);
+	public void updateImage(String email, String path) throws ServiceException {
+		userDao.updateImage(email, path);
 	}
 	
 	public static void sendMail(String sendTo) throws ServiceException {

@@ -223,7 +223,7 @@ public class UserDao {
 		return true;
 	}
 	
-	public boolean updateImage(String email, String path) throws ServiceException {
+	public void updateImage(String email, String path) throws ServiceException {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
@@ -234,7 +234,6 @@ public class UserDao {
 		} catch (SQLException e) {
 			throw new ServiceException(e.getMessage());
 		}
-		return true;
 	}
 	
 	public boolean deleteImage(String email) throws ServiceException {
@@ -253,7 +252,7 @@ public class UserDao {
 	
 	
 	public String getPathImage(String email) throws ServiceException {
-		String path = "";
+		String path = null;
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
