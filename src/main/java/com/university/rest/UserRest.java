@@ -93,6 +93,57 @@ public class UserRest {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+	
+	@GET
+	@Path("/userByName/{email}/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserByName(@PathParam("email") String email, @PathParam("name") String name) {
+		// System.out.println("response correct");
+		List<UserDTO> users;
+		try {
+			users = userService.obtainUserByName(name, email);
+			if (users != null) {
+				return Response.ok(users).build();
+			} else
+				return Response.status(Response.Status.NOT_FOUND).build();
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GET
+	@Path("/userByOrigin/{email}/{origin}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserByOrigin(@PathParam("email") String email, @PathParam("origin") String origin) {
+		// System.out.println("response correct");
+		List<UserDTO> users;
+		try {
+			users = userService.obtainUserByOrigin(origin, email);
+			if (users != null) {
+				return Response.ok(users).build();
+			} else
+				return Response.status(Response.Status.NOT_FOUND).build();
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GET
+	@Path("/userByPhone/{phone}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserByPhone(@PathParam("phone") String phone) {
+		// System.out.println("response correct");
+		UserDTO user;
+		try {
+			user = userService.obtainUserByPhone(phone);
+			if (user != null) {
+				return Response.ok(user).build();
+			} else
+				return Response.status(Response.Status.NOT_FOUND).build();
+		} catch (ServiceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
 	@POST
 	@Path("/insert")

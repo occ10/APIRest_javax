@@ -173,15 +173,14 @@ public class UserDao {
 		return user;
 	}
 
-	public User getUserByMail(String correo) throws ServiceException {
+	public User getUserByMail(String email) throws ServiceException {
 
-		System.out.print("correo es :" + correo);
 		User user = null;
 
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
-			String sql = "select * from usuario where correo=" + "'" + correo + "'";
+			String sql = "select * from usuario where correo=" + "'" + email + "'";
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next()) {
@@ -203,6 +202,109 @@ public class UserDao {
 			throw new ServiceException(e.getMessage());
 		}
 		return user;
+	}
+	
+	
+	public User getUserByPhone(String phone) throws ServiceException {
+
+		User user = null;
+
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+
+			String sql = "select * from usuario where telefono=" + "'" + phone + "'";
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				user = new User();
+				user.setCorreo(rs.getString("correo"));
+				user.setNombre(rs.getString("nombre"));
+				user.setApellido(rs.getString("apellido"));
+				user.setEdad(rs.getInt("edad"));
+				user.setContraseña(rs.getString("contraseña"));
+				user.setTelefono(rs.getString("telefono"));
+				user.setSalt(rs.getString("salt"));
+				user.setFoto(rs.getString("foto"));
+				user.setDetalles(rs.getString("detalles"));
+				user.setConfirmado(rs.getString("confirmado"));
+				user.setOpcion(rs.getInt("opcion"));
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage() + "Error aqui");
+			throw new ServiceException(e.getMessage());
+		}
+		return user;
+	}
+	
+	public List<UserDTO> getUserByName(String name, String email) throws ServiceException {
+		List<UserDTO> users = new ArrayList<UserDTO>();
+		UserDTO user = null;
+
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+
+			String sql = "SELECT `usuario`.* FROM `usuario` JOIN `realizaruta` "
+					+ "ON `usuario`.`correo` = `realizaruta`.`usuario` JOIN `ruta` "
+					+ "ON `realizaruta`.`ruta` = `ruta`.`id`"
+					+ "AND `usuario`.`nombre` like " + "'" + name + "%'"
+					+ "AND `usuario`.`correo` != '" + email + "'" ;
+			
+			System.out.println("consulta para buscar user" + sql);
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				user = new UserDTO();
+				user.setCorreo(rs.getString("correo"));
+				user.setNombre(rs.getString("nombre"));
+				user.setApellido(rs.getString("apellido"));
+				user.setEdad(rs.getInt("edad"));
+				user.setTelefono(rs.getString("telefono"));
+				user.setFoto(rs.getString("foto"));
+				user.setDetalles(rs.getString("detalles"));
+				user.setConfirmado(rs.getString("confirmado"));
+				user.setOpcion(rs.getInt("opcion"));
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage() + "Error aqui");
+			throw new ServiceException(e.getMessage());
+		}
+		return users;
+	}
+	
+	public List<UserDTO> getUserByOrigin(String origin,String email) throws ServiceException {
+
+		List<UserDTO> users = new ArrayList<UserDTO>();
+		UserDTO user = null;
+
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
+
+			String sql = "SELECT `usuario`.* FROM `usuario` JOIN `realizaruta` "
+					+ "ON `usuario`.`correo` = `realizaruta`.`usuario` JOIN `ruta` "
+					+ "ON `realizaruta`.`ruta` = `ruta`.`id` WHERE `ruta`.`origen` = '" + origin + "'"
+					+ " AND `usuario`.`correo` != '" + email + "'" ;
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			System.out.println("consulta para buscar user" + sql);
+			while (rs.next()) {
+				user = new UserDTO();
+				user.setCorreo(rs.getString("correo"));
+				user.setNombre(rs.getString("nombre"));
+				user.setApellido(rs.getString("apellido"));
+				user.setEdad(rs.getInt("edad"));
+				user.setTelefono(rs.getString("telefono"));
+				user.setFoto(rs.getString("foto"));
+				user.setDetalles(rs.getString("detalles"));
+				user.setConfirmado(rs.getString("confirmado"));
+				user.setOpcion(rs.getInt("opcion"));
+				
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return users;
 	}
 
 	public boolean update(User user) throws ServiceException {

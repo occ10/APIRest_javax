@@ -37,22 +37,35 @@ public class UserService {
 
 	public UserDTO obtenerDatosUser(String Correo, String password) throws ServiceException {
 		User user = userDao.getUser(Correo, password);
-		UserDTO userDTO = null;
-		if(user == null)
-			System.out.println("usuario nuloooooo");
-		else
-			System.out.println("usuario " + user.getCorreo());
-		return userDTO = user != null ? new UserDTO(user) : null;
+		UserDTO userDTO = user != null ? new UserDTO(user) : null;;
+		return userDTO;
 	}
 
-	public UserDTO obtenerDatosUserByMail(String Correo) throws ServiceException {
-		User user = userDao.getUserByMail(Correo);
+	public UserDTO obtenerDatosUserByMail(String email) throws ServiceException {
+		User user = userDao.getUserByMail(email);
 		if (user != null)
 			return new UserDTO(user);
 		else
 			return null;
 	}
+	
+	public UserDTO obtainUserByPhone(String phone) throws ServiceException {
+		User user = userDao.getUserByPhone(phone);
+		if (user != null)
+			return new UserDTO(user);
+		else
+			return null;
+	}
+	
+	public List<UserDTO> obtainUserByName(String name, String email) throws ServiceException {
+		return userDao.getUserByName(name, email);
 
+	}
+	
+	public List<UserDTO> obtainUserByOrigin(String origin, String email) throws ServiceException {
+		return userDao.getUserByOrigin(origin,email);
+	}
+	
 	public boolean updateUser(User user) throws ServiceException {
 		return userDao.update(user);
 	}
