@@ -135,6 +135,12 @@ public class CarRest {
 		}
 		String uploadedFileLocation = UPLOAD_FOLDER + fileDetail.getFileName();
 		try {
+			String path = carService.getPathImage(email);
+			if(path != null){
+				File file = new File(path);
+				file.delete();
+    			System.out.println(file.getName() + " is deleted!");
+			}
 			userService.saveToFile(uploadedInputStream, uploadedFileLocation);
 			carService.updateImage(email, uploadedFileLocation);
 			

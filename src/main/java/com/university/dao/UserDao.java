@@ -243,13 +243,11 @@ public class UserDao {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
-			String sql = "SELECT `usuario`.* FROM `usuario` JOIN `realizaruta` "
-					+ "ON `usuario`.`correo` = `realizaruta`.`usuario` JOIN `ruta` "
-					+ "ON `realizaruta`.`ruta` = `ruta`.`id`"
-					+ "AND `usuario`.`nombre` like " + "'" + name + "%'"
-					+ "AND `usuario`.`correo` != '" + email + "'" ;
+			String sql = "SELECT * FROM usuario"
+					+ " WHERE nombre like " + "'" + name + "%'"
+					+ "AND correo != '" + email + "'" ;
 			
-			System.out.println("consulta para buscar user" + sql);
+			
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
@@ -280,13 +278,13 @@ public class UserDao {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jeebd", "root", "");
 
-			String sql = "SELECT `usuario`.* FROM `usuario` JOIN `realizaruta` "
+			String sql = "SELECT DISTINCT `usuario`.* FROM `usuario` JOIN `realizaruta` "
 					+ "ON `usuario`.`correo` = `realizaruta`.`usuario` JOIN `ruta` "
 					+ "ON `realizaruta`.`ruta` = `ruta`.`id` WHERE `ruta`.`origen` = '" + origin + "'"
 					+ " AND `usuario`.`correo` != '" + email + "'" ;
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
-			System.out.println("consulta para buscar user" + sql);
+
 			while (rs.next()) {
 				user = new UserDTO();
 				user.setCorreo(rs.getString("correo"));
@@ -301,6 +299,8 @@ public class UserDao {
 				
 				users.add(user);
 			}
+			
+			System.out.println("USUARIOS DEVUELTOS: " + users.size());
 		} catch (SQLException e) {
 			throw new ServiceException(e.getMessage());
 		}
